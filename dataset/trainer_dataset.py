@@ -1,5 +1,6 @@
 import torch
 import dataset.dataset_shapenet as dataset_shapenet
+import dataset.dataset_meshes as dataset_meshes
 import dataset.augmenter as augmenter
 from easydict import EasyDict
 
@@ -16,8 +17,12 @@ class TrainerDataset(object):
 
         self.datasets = EasyDict()
         # Create Datasets
-        self.datasets.dataset_train = dataset_shapenet.ShapeNet(self.opt, train=True)
-        self.datasets.dataset_test = dataset_shapenet.ShapeNet(self.opt, train=False)
+        if self.opt.assemblies:
+            self.datasets.dataset_train = dataset_meshes.AssemblyMesh(self.opt, train=True)
+            self.datasets.dataset_test = dataset_meshes.AssemblyMesh(self.opt, train=False)
+        else:
+            self.datasets.dataset_train = dataset_shapenet.ShapeNet(self.opt, train=True)
+            self.datasets.dataset_test = dataset_shapenet.ShapeNet(self.opt, train=False)
 
         if not self.opt.demo:
             # Create dataloaders

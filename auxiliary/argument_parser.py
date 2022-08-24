@@ -16,6 +16,7 @@ def parser():
     parser = argparse.ArgumentParser()
 
     # Training parameters
+    parser.add_argument('--max_samples', type=int, default=0, help='subset of the dataset to sample')
     parser.add_argument("--no_learning", action="store_true", help="Learning mode (batchnorms...)")
     parser.add_argument("--train_only_encoder", action="store_true", help="only train the encoder")
     parser.add_argument('--batch_size', type=int, default=32, help='input batch size')
@@ -32,6 +33,9 @@ def parser():
     parser.add_argument("--demo", action="store_true", help="run demo autoencoder or single-view")
 
     # Data
+    parser.add_argument('--assemblies', action='store_true', help='use assembly dataset instead of shapenet')
+    parser.add_argument('--mesh_path', type=str, default='/fast/jamesn8/assembly_data/assembly_torch2_fixsize/complex_meshes/meshes')
+
     parser.add_argument('--normalization', type=str, default="UnitBall",
                         choices=['UnitBall', 'BoundingBox', 'Identity'])
     parser.add_argument("--shapenet13", action="store_true", help="Load 13 usual shapenet categories")
