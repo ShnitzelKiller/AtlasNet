@@ -12,7 +12,7 @@ from os.path import exists, join
 """
 
 
-def parser():
+def parser(args=None):
     parser = argparse.ArgumentParser()
 
     # Training parameters
@@ -82,7 +82,7 @@ def parser():
     # Loss
     parser.add_argument("--no_metro", action="store_true", help="Compute metro distance")
 
-    opt = parser.parse_args()
+    opt = parser.parse_args(args=args)
 
     opt.date = str(datetime.datetime.now())
     now = datetime.datetime.now()
@@ -124,6 +124,8 @@ def parser():
         my_opt_dict.pop("demo")
         my_opt_dict.pop("demo_input_path")
         my_opt_dict.pop("dir_name")
+        my_opt_dict.pop("reload_model_path")
+        my_opt_dict.pop("reload_decoder_path")
         for key in my_opt_dict.keys():
             opt[key] = my_opt_dict[key]
         if not opt.demo:
