@@ -56,11 +56,11 @@ class AssemblyMesh(data.Dataset):
                 mesh, mesh_path = self._getitem(i)
                 V = torch.from_numpy(mesh.vertices).float()
                 F = torch.from_numpy(mesh.faces).long()
-                points, _ = sample_point_cloud(self.num_sample, V, F)
+                points, _ = sample_point_cloud(self.num_sample, V, F.T)
                 self.data_points.append(points)
                 self.data_metadata.append({'mesh_path': mesh_path})
             
-            self.data_points = torch.cat(self.data_points, 0)
+            self.data_points = torch.stack(self.data_points)
 
             # Save in cache
             with open(self.path_dataset + "info.pkl", "wb") as fp:  # Pickling

@@ -74,7 +74,7 @@ class ShapeNet(data.Dataset):
             if not exists(self.path_dataset):
                 os.mkdir(self.path_dataset)
             self.path_dataset = join(self.path_dataset,
-                                     self.opt.normalization + str(train) + "_".join(self.opt.class_choice))
+                                     self.opt.normalization + str(train) + str(self.opt.max_samples) + "_".join(self.opt.class_choice))
 
             if not exists(self.image_path):
                 os.system("chmod +x dataset/download_shapenet_renderings.sh")
@@ -88,6 +88,8 @@ class ShapeNet(data.Dataset):
                 dir_pointcloud = join(self.pointcloud_path, category)
                 dir_image = join(self.image_path, category)
                 list_pointcloud = sorted(os.listdir(dir_pointcloud))
+                if self.opt.max_samples > 0:
+                    list_pointcloud = list_pointcloud[:self.opt.max_samples]
                 if self.train:
                     list_pointcloud = list_pointcloud[:int(len(list_pointcloud) * 0.8)]
                 else:
