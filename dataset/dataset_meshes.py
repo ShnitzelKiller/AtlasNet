@@ -1,6 +1,6 @@
 import torch.utils.data as data
 import auxiliary.my_utils as my_utils
-from .point_sample import sample_point_cloud
+from dataset.point_sample import sample_point_cloud
 import pymesh
 import os
 from os.path import join, dirname, exists

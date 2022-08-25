@@ -218,51 +218,6 @@ class ShapeNet(data.Dataset):
         else:
             return str(N)
 
-    def load(self, path):
-        ext = path.split('.')[-1]
-        if ext == "npy" or ext == "ply" or ext == "obj":
-            return self.load_point_input(path)
-        else:
-            return self.load_image(path)
-
-    def load_point_input(self, path):
-        ext = path.split('.')[-1]
-        if ext == "npy":
-            points = np.load(path)
-        elif ext == "ply" or ext == "obj":
-            import pymesh
-            points = pymesh.load_mesh(path).vertices
-        else:
-            print("invalid file extension")
-
-        points = torch.from_numpy(points).float()
-        operation = pointcloud_processor.Normalization(points, keep_track=True)
-        if self.opt.normalization == "UnitBall":
-            operation.normalize_unitL2ball()
-        elif self.opt.normalization == "BoundingBox":
-            operation.normalize_bounding_box()
-        else:
-            pass
-        return_dict = {
-            'points': points,
-            'operation': operation,
-            'path': path,
-        }
-        return return_dict
-
-
-    def load_image(self, path):
-        im = Image.open(path)
-        im = self.validating(im)
-        im = self.transforms(im)
-        im = im[:3, :, :]
-        return_dict = {
-            'image': im.unsqueeze_(0),
-            'operation': None,
-            'path': path,
-        }
-        return return_dict
-
 
 if __name__ == '__main__':
     print('Testing Shapenet dataset')

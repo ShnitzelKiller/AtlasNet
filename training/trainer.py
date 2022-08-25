@@ -141,14 +141,14 @@ class Trainer(TrainerAbstract, TrainerLoss, TrainerIteration, TrainerDataset, Tr
         :return: path to the generated mesh
         """
         ext = demo_path.split('.')[-1]
-        self.data = self.datasets.dataset_train.load(demo_path)
+        self.data = self.load(demo_path)
         self.data = EasyDict(self.data)
 
         if input_path_points is None:
             input_path_points = demo_path
 
         #prepare normalization
-        get_normalization = self.datasets.dataset_train.load(input_path_points)
+        get_normalization = self.load(input_path_points)
         get_normalization = EasyDict(get_normalization)
 
         self.make_network_input()
