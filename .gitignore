@@ -3,3 +3,6 @@ training/trained_models/
 *~
 doc/pictures/plane_input_demoAtlasnetReconstruction.ply
 dataset/data
+log/
+.vscode/
+assembly_dataset*
