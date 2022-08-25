@@ -34,7 +34,8 @@ def parser():
 
     # Data
     parser.add_argument('--assemblies', action='store_true', help='use assembly dataset instead of shapenet')
-    parser.add_argument('--mesh_path', type=str, default='/fast/jamesn8/assembly_data/assembly_torch2_fixsize/complex_meshes/meshes')
+    parser.add_argument('--mesh_path', type=str, default='/fast/jamesn8/assembly_data/assembly_torch2_fixsize/complex_meshes/meshes', help='location of obj files directory')
+    parser.add_argument('--scale_fac', type=float, default=0.5, help='amount by which to scale the loaded meshes')
 
     parser.add_argument('--normalization', type=str, default="UnitBall",
                         choices=['UnitBall', 'BoundingBox', 'Identity'])

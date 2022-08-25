@@ -22,7 +22,7 @@ class AssemblyMesh(data.Dataset):
         if not exists(self.path_dataset):
             os.mkdir(self.path_dataset)
         self.path_dataset = join(self.path_dataset,
-                    'Assembly' + self.opt.normalization + str(train) + str(self.opt.max_samples))
+                    'Assembly' + self.opt.normalization + str(train) + str(self.opt.max_samples) + 'scale' + str(self.opt.scale_fac))
 
         #populate with all mesh paths
         self.datapath = sorted([d.path for d in os.scandir(opt.mesh_path) if d.name.endswith('obj')])
@@ -57,6 +57,7 @@ class AssemblyMesh(data.Dataset):
                 V = torch.from_numpy(mesh.vertices).float()
                 F = torch.from_numpy(mesh.faces).long()
                 points, _ = sample_point_cloud(self.num_sample, V, F.T)
+                points *= self.opt.scale_fac
                 self.data_points.append(points)
                 self.data_metadata.append({'mesh_path': mesh_path})
             
