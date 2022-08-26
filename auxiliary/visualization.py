@@ -2,6 +2,9 @@ import visdom
 import os
 import sys
 import time
+import numpy as np
+import torch
+import colorsys
 
 """
     Author : Thibault Groueix 01.11.2019
@@ -51,7 +54,7 @@ class Visualizer(object):
         vis = visdom.Visdom(port=visdom_port, env=env)
         self.vis = vis
 
-    def show_pointcloud(self, points, title=None, Y=None):
+    def show_pointcloud(self, points, title=None, Y=None, color=None):
         """
         :param points: pytorch tensor pointcloud
         :param title:
@@ -75,7 +78,8 @@ class Visualizer(object):
             ytickstep=0.3,
             ztickmin=-0.7,
             ztickmax=0.7,
-            ztickstep=0.3)
+            ztickstep=0.3,
+            markercolor=color)
 
         if Y is None:
             self.vis.scatter(X=points, win=title, opts=opts)
@@ -89,8 +93,16 @@ class Visualizer(object):
     def show_pointclouds(self, points, title=None, Y=None):
         points = points.squeeze()
         assert points.dim() == 3
+
+        color = np.zeros([points.shape[0] * points.shape[2], 3], int)
+        offset = 0
         for i in range(points.size(0)):
-            self.show_pointcloud(points[i], title=title)
+            col = (np.array(colorsys.hsv_to_rgb(i/points.size(0), 1, 1)) * 255).astype(int)
+            color[offset:offset+points.size(2)] = col
+            #self.show_pointcloud(points[i], title=title)
+            offset += points.size(2)
+        points = points.transpose(1,2).reshape(-1,3).transpose(0,1)
+        self.show_pointcloud(points, title=title, color=color)
 
     def show_image(self, img, title=None):
         img = img.squeeze()
